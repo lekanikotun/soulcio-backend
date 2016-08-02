@@ -26,15 +26,58 @@ var mainController = function() {
         }).catch(function(error) {
 
             console.log(error);
-            //res.status(500).json(error);
 
             next(error);
         });
 
     }
 
+    function login(req, res, next) {
+
+
+
+        var uri = config.baseUrl + 'login';
+
+        var data = {
+            email: req.body.email,
+            password: req.body.password,
+            ip: req.ip === '::1' ? '127.0.0.1' : req.ip
+        };
+
+        console.log("Request Data", req);
+
+        httpUtils.postForm(uri, data).then(function(data) {
+
+            res.status(200).json(data);
+
+        }).catch(function(error) {
+
+            console.log(error);
+            //res.status(500).json(error);
+
+            next(error);
+        });
+    }
+
+    function activityFeeds(req, res, next) {
+
+        var uri = config.baseUrl + 'activity';
+
+        httpUtils.get(uri).then(function(data) {
+            res.status(200).json(data);
+        }).catch(function(error) {
+
+            console.log(error);
+            //res.status(500).json(error);
+
+            next(error);
+        });
+    }
+
     return {
-        getData: getData
+        getData: getData,
+        login: login,
+        activityFeeds: activityFeeds
     }
 
 };
